@@ -1,21 +1,57 @@
 {
     "name": "@jarcher/restify",
-    "version": "0.1.0",
+    "version": "1.0.1",
     "description": "Schema-driven REST API scaffolding with pluggable data providers and seed support",
-    "type": "module",
     "main": "./index.js",
-    "exports": {
-        ".": "./index.js",
-        "./crud": "./crud/router.js",
-        "./schema": "./schema/validator.js",
-        "./repo": "./repo/index.js",
-        "./rest": "./rest/loader.js"
+    "type": "module",
+    "license": "AGPL-3.0-only",
+    "private": false,
+    "engines": {
+        "node": ">= 14.0.0",
+        "npm": ">= 6.0.0"
     },
-    "author": "jarcher",
-    "license": "MIT",
+    "keywords": [
+        "rest",
+        "crud",
+        "api",
+        "schema",
+        "express",
+        "generator",
+        "mongodb",
+        "mysql",
+        "in-memory"
+    ],
+    "homepage": "https://github.com/joshbarcher",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/joshbarcher/restify"
+    },
+    "author": {
+        "name": "Josh Archer",
+        "email": "jarcher@greenriver.edu",
+        "url": "https://github.com/joshbarcher"
+    },
     "dependencies": {
         "express": "^4.18.2",
         "mysql2": "^3.6.0",
         "mongodb": "^6.5.0"
+    },
+    "publishConfig": {
+        "registry": "http://localhost:4873"
+    },
+    "exports": {
+        ".": "./index.js"
+    },
+    "files": [
+        "index.js",
+        "crud/",
+        "repo/",
+        "schema/",
+        "rest/"
+    ],
+    "scripts": {
+        "patch": "npm version patch --no-git-tag-version && npm publish --registry http://localhost:4873",
+        "minor": "npm version minor --no-git-tag-version && npm publish --registry http://localhost:4873",
+        "major": "npm version major --no-git-tag-version && npm publish --registry http://localhost:4873"
     }
 }

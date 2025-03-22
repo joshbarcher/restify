@@ -186,5 +186,4 @@ Need an example to copy from? Check out the `dev/` folder inside this package fo
 
 ## 📝 License
 
-MIT — by [@jarcher](https://your-site-or-gh-link.dev)
-
+AGPL-3.0-only — by [@jarcher](https://github.com/joshbarcher)
