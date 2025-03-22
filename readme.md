@@ -38,12 +38,18 @@ npm install @jarcher/restify
 
 ```
 rest/
-└── hobbies/
+├── hobbies/
+│   ├── schema.json
+│   └── seed.json
+├── tasks/
+│   ├── schema.json
+│   └── seed.json
+└── users/
     ├── schema.json
     └── seed.json
 ```
 
-### `schema.json`
+### `hobbies/schema.json`
 
 ```json
 {
@@ -56,7 +62,7 @@ rest/
 }
 ```
 
-### `seed.json`
+### `hobbies/seed.json`
 
 ```json
 [
@@ -104,25 +110,40 @@ No setup needed. Great for testing or prototyping.
 ### ✅ MongoDB
 
 ```js
+import express from 'express';
 import { MongoClient } from 'mongodb';
+import { loadRestResources, repoProviders } from '@jarcher/restify';
 
 const client = new MongoClient('mongodb://localhost:27017');
 await client.connect();
 const db = client.db('myapp');
 
-repoProvider: (resourceName) => repoProviders.mongodb({
-  collection: db.collection(resourceName)
+const app = express();
+app.use(express.json());
+
+await loadRestResources({
+  app,
+  baseDir: './rest',
+  repoProvider: (resourceName) => repoProviders.mongodb({
+    collection: db.collection(resourceName)
+  })
+});
+
+app.listen(3000, () => {
+  console.log('API ready at http://localhost:3000/api');
 });
 ```
 
-Each resource (e.g. `notes`, `tasks`) maps to a Mongo collection.
+Each resource folder (e.g. `notes`, `tasks`) is mapped to a MongoDB collection of the same name.
 
 ---
 
 ### ✅ MySQL2
 
 ```js
+import express from 'express';
 import mysql from 'mysql2/promise';
+import { loadRestResources, repoProviders } from '@jarcher/restify';
 
 const pool = await mysql.createPool({
   host: 'localhost',
@@ -131,13 +152,24 @@ const pool = await mysql.createPool({
   database: 'myapp'
 });
 
-repoProvider: (resourceName) => repoProviders.mysql2({
-  pool,
-  table: resourceName
+const app = express();
+app.use(express.json());
+
+await loadRestResources({
+  app,
+  baseDir: './rest',
+  repoProvider: (resourceName) => repoProviders.mysql2({
+    pool,
+    table: resourceName
+  })
+});
+
+app.listen(3000, () => {
+  console.log('API ready at http://localhost:3000/api');
 });
 ```
 
-Each resource corresponds to a table in the database.
+Each resource folder (e.g. `notes`, `tasks`) is mapped to a MySQL table of the same name.
 
 ---
 
@@ -187,3 +219,4 @@ Need an example to copy from? Check out the `dev/` folder inside this package fo
 ## 📝 License
 
 AGPL-3.0-only — by [@jarcher](https://github.com/joshbarcher)
+
