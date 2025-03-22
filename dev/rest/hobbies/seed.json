@@ -1,0 +1,17 @@
+[
+    {
+        "id": "hobby-1",
+        "name": "Hiking",
+        "category": "Outdoors"
+    },
+    {
+        "id": "hobby-2",
+        "name": "Painting",
+        "category": "Creative"
+    },
+    {
+        "id": "hobby-3",
+        "name": "Chess",
+        "category": "Mind Games"
+    }
+]

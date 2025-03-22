@@ -1,0 +1,21 @@
+{
+    "name": "@jarcher/restify",
+    "version": "0.1.0",
+    "description": "Schema-driven REST API scaffolding with pluggable data providers and seed support",
+    "type": "module",
+    "main": "./index.js",
+    "exports": {
+        ".": "./index.js",
+        "./crud": "./crud/router.js",
+        "./schema": "./schema/validator.js",
+        "./repo": "./repo/index.js",
+        "./rest": "./rest/loader.js"
+    },
+    "author": "jarcher",
+    "license": "MIT",
+    "dependencies": {
+        "express": "^4.18.2",
+        "mysql2": "^3.6.0",
+        "mongodb": "^6.5.0"
+    }
+}
