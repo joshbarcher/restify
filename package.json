@@ -1,6 +1,6 @@
 {
     "name": "@jarcher/restify",
-    "version": "1.0.2",
+    "version": "1.0.4",
     "description": "Schema-driven REST API scaffolding with pluggable data providers and seed support",
     "main": "./index.js",
     "type": "module",
