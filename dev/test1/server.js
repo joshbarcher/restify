@@ -18,6 +18,6 @@ await createEndpoints({
     forceSeed: true
 });
 
-app.listen(3000, () => {
-    console.log('Dev API running at http://localhost:3000/api');
+app.listen(3004, () => {
+    console.log('Dev API running at http://localhost:3004/api');
 });

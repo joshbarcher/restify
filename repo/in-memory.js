@@ -9,33 +9,36 @@ export function createInMemoryRepo() {
     };
 
     return {
-        async findAll({ page, pageSize, query = '' } = {}) {
-            let items = Array.from(store.values());
+        findAll: async ({
+            query = '',
+            filterField = 'title',
+            findOne = false,
+            page = 1,
+            pageSize = 25
+        } = {}) => {
+            let filtered = data;
 
             if (query) {
-                const lowerQuery = query.toLowerCase();
-                items = items.filter(item =>
-                    (item.title || '').toLowerCase().includes(lowerQuery)
+                const lower = query.toLowerCase();
+                filtered = data.filter(item =>
+                    (item[filterField] || '').toLowerCase().includes(lower)
                 );
             }
 
-            if (typeof pageSize !== 'number') {
-                return {
-                    results: items,
-                    totalPages: 1,
-                    totalItems: items.length
-                };
+            if (findOne) {
+                return filtered[0] || null;
             }
 
-            const totalItems = items.length;
+            const total = filtered.length;
             const start = (page - 1) * pageSize;
-            const end = start + pageSize;
-            const pagedItems = items.slice(start, end);
+            const paged = filtered.slice(start, start + pageSize);
 
             return {
-                results: pagedItems,
-                totalPages: Math.ceil(totalItems / pageSize),
-                totalItems
+                results: paged,
+                page,
+                pageSize,
+                totalItems: total,
+                totalPages: Math.ceil(total / pageSize)
             };
         },
         async findById(id) {

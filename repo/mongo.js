@@ -2,10 +2,21 @@ import { ObjectId } from 'mongodb';
 
 export function createMongoRepo({ collection }) {
     return {
-        async findAll({ page, pageSize, query = '' } = {}) {
+        findAll: async ({
+            query = '',
+            filterField = 'title',
+            findOne = false,
+            page = 1,
+            pageSize = 25
+        } = {}) => {
             const filter = query
-                ? { title: { $regex: query, $options: 'i' } }
+                ? { [filterField]: { $regex: query, $options: 'i' } }
                 : {};
+
+            if (findOne) {
+                const result = await collection.findOne(filter);
+                return result ? withId(result) : null;
+            }
 
             if (typeof pageSize !== 'number') {
                 const docs = await collection.find(filter).toArray();
@@ -17,13 +28,18 @@ export function createMongoRepo({ collection }) {
             }
 
             const skip = (page - 1) * pageSize;
-            const docs = await collection.find(filter).skip(skip).limit(pageSize).toArray();
-            const total = await collection.countDocuments(filter);
+
+            const [results, total] = await Promise.all([
+                collection.find(filter).skip(skip).limit(pageSize).toArray(),
+                collection.countDocuments(filter)
+            ]);
 
             return {
-                results: docs.map(withId),
-                totalPages: Math.ceil(total / pageSize),
-                totalItems: total
+                results: results.map(withId),
+                page,
+                pageSize,
+                totalItems: total,
+                totalPages: Math.ceil(total / pageSize)
             };
         },
         async findById(id) {

@@ -8,19 +8,37 @@ export function createCRUDRoutes({ schema, repo, resource = 'resource' }) {
     const router = express.Router();
 
     router.get('/', async (req, res) => {
-        const page = req.query.page ? parseInt(req.query.page, 10) : undefined;
-        const pageSize = req.query.pageSize ? parseInt(req.query.pageSize, 10) : undefined;
-        const query = req.query.query || '';
+        const {
+            filter = '',
+            filterField = 'title',
+            findOne,
+            page,
+            pageSize
+        } = req.query;
 
         try {
-            const result = await repo.findAll({ page, pageSize, query });
+            const result = await repo.findAll({
+                query: filter,
+                filterField,
+                findOne: findOne === 'true',
+                page: page ? parseInt(page, 10) : 1,
+                pageSize: pageSize ? parseInt(pageSize, 10) : 25
+            });
+
+            if (findOne === 'true') {
+                if (!result) {
+                    return res.status(404).json({ error: `${resource} not found.` });
+                }
+                return res.json(result);
+            }
 
             res.json({
                 [resource]: result.results,
-                totalItems: result.totalItems,
+                totalItems: result.total,
                 totalPages: result.totalPages
             });
         } catch (err) {
+            console.error(`Error in GET /api/${resource}`, err);
             res.status(500).json({ error: `Failed to fetch ${resource} list.` });
         }
     });
