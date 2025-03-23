@@ -1,6 +1,6 @@
 import express from 'express';
-import { createEndpoints } from '../utils/rest.utils.js';
-import { mongodbProvider } from '../repo/index.js'; // consistent import
+import { createEndpoints } from '../../utils/rest.utils.js';
+import { mongodbProvider } from '../../repo/index.js'; // consistent import
 import { MongoClient } from 'mongodb';
 
 //test db

@@ -1,5 +1,12 @@
 #!/usr/bin/env node
-import { createRest } from '../cli/create-rest.js';
+import path from 'path';
+import { fileURLToPath, pathToFileURL } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const modulePath = path.join(__dirname, '../cli/create-rest.js');
+const { createRest } = await import(pathToFileURL(modulePath).href);
 
 const [, , command, ...args] = process.argv;
 
