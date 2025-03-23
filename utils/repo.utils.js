@@ -1,5 +1,5 @@
 const REQUIRED_METHODS = [
-    'findAll', 'findById', 'create', 'update', 'delete', 'bulkCreate'
+    'findAll', 'findById', 'create', 'update', 'delete', 'bulkCreate', 'bulkDelete'
 ];
 
 export function validateRepository(repo) {

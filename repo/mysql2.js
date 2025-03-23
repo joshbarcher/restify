@@ -30,6 +30,9 @@ export function createMySQLRepo({ pool, table }) {
                 inserted.push(created);
             }
             return inserted;
+        },
+        bulkDelete: async () => {
+            await pool.query(`DELETE FROM ??`, [table]);
         }
     };
 }

@@ -31,6 +31,9 @@ export function createInMemoryRepo() {
                 result.push(await create(item));
             }
             return result;
+        },
+        bulkDelete: async () => {
+            store.clear();
         }
     };
 }

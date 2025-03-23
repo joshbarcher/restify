@@ -30,6 +30,9 @@ export function createMongoRepo({ collection }) {
             const ids = Object.values(result.insertedIds);
             const docs = await collection.find({ _id: { $in: ids } }).toArray();
             return docs.map(withId);
+        },
+        bulkDelete: async () => {
+            await collection.deleteMany({});
         }
     };
 }
