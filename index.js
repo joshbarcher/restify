@@ -1,2 +1,2 @@
-export { createEndpoints } from './rest/loader.js';
-export * as repoProviders from './repo/index.js';
+export { createEndpoints } from './utils/rest.utils.js';
+export * from './repo/index.js';

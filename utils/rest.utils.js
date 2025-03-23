@@ -1,6 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
-import { createCRUDRoutes } from './../utils/routes.utils.js';
+import { createCRUDRoutes } from './routes.utils.js';
 
 export async function createEndpoints({ app, baseDir = './rest', repoProvider }) {
     const entries = await fs.readdir(baseDir, { withFileTypes: true });

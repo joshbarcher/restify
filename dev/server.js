@@ -1,6 +1,6 @@
 import express from 'express';
-import { createEndpoints } from '../rest/scanner.js';
-import { mongodb } from '../repo/index.js'; // consistent import
+import { createEndpoints } from '../utils/rest.utils.js';
+import { mongodbProvider } from '../repo/index.js'; // consistent import
 import { MongoClient } from 'mongodb';
 
 //test db
@@ -13,7 +13,7 @@ app.use(express.json());
 
 await createEndpoints({
     app,
-    repoProvider: (resourceName) => mongodb({ collection: db.collection(resourceName) }),
+    repoProvider: (resourceName) => mongodbProvider({ collection: db.collection(resourceName) }),
     baseDir: './dev/rest'
 });
 
