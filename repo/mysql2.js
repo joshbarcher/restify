@@ -1,8 +1,34 @@
 export function createMySQLRepo({ pool, table }) {
     return {
-        async findAll() {
-            const [rows] = await pool.query(`SELECT * FROM ??`, [table]);
-            return rows;
+        async findAll({ page, pageSize, query = '' } = {}) {
+            const filterClause = query ? 'WHERE title LIKE ?' : '';
+            const filterValue = query ? [`%${query}%`] : [];
+            const countQuery = `SELECT COUNT(*) as count FROM \`${table}\` ${filterClause}`;
+            const [[{ count }]] = await pool.query(countQuery, filterValue);
+
+            if (typeof pageSize !== 'number') {
+                const [rows] = await pool.query(
+                    `SELECT * FROM \`${table}\` ${filterClause}`,
+                    filterValue
+                );
+                return {
+                    results: rows,
+                    totalPages: 1,
+                    totalItems: rows.length
+                };
+            }
+
+            const offset = (page - 1) * pageSize;
+            const [rows] = await pool.query(
+                `SELECT * FROM \`${table}\` ${filterClause} LIMIT ? OFFSET ?`,
+                [...filterValue, pageSize, offset]
+            );
+
+            return {
+                results: rows,
+                totalPages: Math.ceil(count / pageSize),
+                totalItems: count
+            };
         },
         async findById(id) {
             const [rows] = await pool.query(`SELECT * FROM ?? WHERE id = ?`, [table, id]);

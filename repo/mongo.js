@@ -2,9 +2,29 @@ import { ObjectId } from 'mongodb';
 
 export function createMongoRepo({ collection }) {
     return {
-        async findAll() {
-            const docs = await collection.find().toArray();
-            return docs.map(withId);
+        async findAll({ page, pageSize, query = '' } = {}) {
+            const filter = query
+                ? { title: { $regex: query, $options: 'i' } }
+                : {};
+
+            if (typeof pageSize !== 'number') {
+                const docs = await collection.find(filter).toArray();
+                return {
+                    results: docs.map(withId),
+                    totalPages: 1,
+                    totalItems: docs.length
+                };
+            }
+
+            const skip = (page - 1) * pageSize;
+            const docs = await collection.find(filter).skip(skip).limit(pageSize).toArray();
+            const total = await collection.countDocuments(filter);
+
+            return {
+                results: docs.map(withId),
+                totalPages: Math.ceil(total / pageSize),
+                totalItems: total
+            };
         },
         async findById(id) {
             const doc = await collection.findOne({ _id: new ObjectId(id) });

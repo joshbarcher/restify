@@ -8,8 +8,21 @@ export function createCRUDRoutes({ schema, repo, resource = 'resource' }) {
     const router = express.Router();
 
     router.get('/', async (req, res) => {
-        const result = await repo.findAll();
-        res.json(result);
+        const page = req.query.page ? parseInt(req.query.page, 10) : undefined;
+        const pageSize = req.query.pageSize ? parseInt(req.query.pageSize, 10) : undefined;
+        const query = req.query.query || '';
+
+        try {
+            const result = await repo.findAll({ page, pageSize, query });
+
+            res.json({
+                [resource]: result.results,
+                totalItems: result.totalItems,
+                totalPages: result.totalPages
+            });
+        } catch (err) {
+            res.status(500).json({ error: `Failed to fetch ${resource} list.` });
+        }
     });
 
     router.get('/:id', async (req, res) => {

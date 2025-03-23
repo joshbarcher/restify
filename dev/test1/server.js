@@ -14,8 +14,8 @@ app.use(express.json());
 await createEndpoints({
     app,
     repoProvider: (resourceName) => mongodbProvider({ collection: db.collection(resourceName) }),
-    baseDir: './dev/rest',
-    forceSeed: false
+    baseDir: './dev/test1/rest',
+    forceSeed: true
 });
 
 app.listen(3000, () => {

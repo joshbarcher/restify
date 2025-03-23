@@ -9,8 +9,34 @@ export function createInMemoryRepo() {
     };
 
     return {
-        async findAll() {
-            return [...store.values()];
+        async findAll({ page, pageSize, query = '' } = {}) {
+            let items = Array.from(store.values());
+
+            if (query) {
+                const lowerQuery = query.toLowerCase();
+                items = items.filter(item =>
+                    (item.title || '').toLowerCase().includes(lowerQuery)
+                );
+            }
+
+            if (typeof pageSize !== 'number') {
+                return {
+                    results: items,
+                    totalPages: 1,
+                    totalItems: items.length
+                };
+            }
+
+            const totalItems = items.length;
+            const start = (page - 1) * pageSize;
+            const end = start + pageSize;
+            const pagedItems = items.slice(start, end);
+
+            return {
+                results: pagedItems,
+                totalPages: Math.ceil(totalItems / pageSize),
+                totalItems
+            };
         },
         async findById(id) {
             return store.get(id) || null;
