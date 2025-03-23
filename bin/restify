@@ -1,0 +1,16 @@
+#!/usr/bin/env node
+import { createRest } from '../cli/create-rest.js';
+
+const [, , command, ...args] = process.argv;
+
+if (command === 'create-rest') {
+    if (args.length === 0) {
+        console.error('Please specify at least one resource name');
+        process.exit(1);
+    }
+
+    await createRest(args);
+} else {
+    console.error(`Unknown command: ${command}`);
+    process.exit(1);
+}

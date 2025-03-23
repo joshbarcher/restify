@@ -1,6 +1,6 @@
 {
     "name": "@jarcher/restify",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "description": "Schema-driven REST API scaffolding with pluggable data providers and seed support",
     "main": "./index.js",
     "type": "module",
@@ -51,5 +51,8 @@
         "patch": "npm version patch --no-git-tag-version && npm publish --registry http://localhost:4873",
         "minor": "npm version minor --no-git-tag-version && npm publish --registry http://localhost:4873",
         "major": "npm version major --no-git-tag-version && npm publish --registry http://localhost:4873"
+    },
+    "bin": {
+        "restify": "./bin/restify"
     }
 }
