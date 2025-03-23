@@ -1,22 +1,22 @@
 import express from 'express';
-import { loadRestResources } from '../rest/loader.js';
+import { createEndpoints } from '../rest/scanner.js';
 import { mongodb } from '../repo/index.js'; // consistent import
 import { MongoClient } from 'mongodb';
 
 //test db
 const client = new MongoClient('mongodb://localhost:27017');
-const db = client.db('restify-dev');
+const db = client.db('test-restify');
 
 //test app
 const app = express();
 app.use(express.json());
 
-await loadRestResources({
-  app,
-  repoProvider: () => mongodb({ collection: db.collection('hobbies') }),
-  baseDir: './dev/rest'
+await createEndpoints({
+    app,
+    repoProvider: (resourceName) => mongodb({ collection: db.collection(resourceName) }),
+    baseDir: './dev/rest'
 });
 
 app.listen(3000, () => {
-  console.log('Dev API running at http://localhost:3000/api');
+    console.log('Dev API running at http://localhost:3000/api');
 });

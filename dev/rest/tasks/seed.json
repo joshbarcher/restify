@@ -1,0 +1,12 @@
+[
+    {
+        "id": "task-1",
+        "title": "Set up project",
+        "completed": false
+    },
+    {
+        "id": "task-2",
+        "title": "Write docs",
+        "completed": true
+    }
+]

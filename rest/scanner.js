@@ -1,8 +1,8 @@
 import fs from 'fs/promises';
 import path from 'path';
-import { createCRUDRoutes } from '../crud/router.js';
+import { createCRUDRoutes } from './../utils/routes.utils.js';
 
-export async function loadRestResources({ app, baseDir = './rest', repoProvider }) {
+export async function createEndpoints({ app, baseDir = './rest', repoProvider }) {
     const entries = await fs.readdir(baseDir, { withFileTypes: true });
 
     for (const entry of entries) {
@@ -13,7 +13,7 @@ export async function loadRestResources({ app, baseDir = './rest', repoProvider 
         const seedPath = path.join(baseDir, name, 'seed.json');
 
         const schema = JSON.parse(await fs.readFile(schemaPath, 'utf-8'));
-        const repo = repoProvider();
+        const repo = repoProvider(name);
 
         const router = createCRUDRoutes({ schema, repo, resource: name });
         app.use(`/api/${name}`, router);

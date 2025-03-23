@@ -1,9 +1,9 @@
 import express from 'express';
-import { validate } from '../schema/validator.js';
-import { defineRepository } from '../repo/define.js';
+import { validate } from './validation.utils.js';
+import { validateRepository } from './repo.utils.js';
 
 export function createCRUDRoutes({ schema, repo, resource = 'resource' }) {
-    defineRepository(repo);
+    validateRepository(repo);
 
     const router = express.Router();
 
